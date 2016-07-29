@@ -1,8 +1,12 @@
+#include <SoftwareSerial.h>
+
 #define LED 13
+#define BT_Rx  3 //Pin digital utilizado para recibir datos
+#define BT_Tx  2 //Pin digital utilizado para enviar datos
 
 #define FSR_0 A0 //Sensor Pecho
 #define FSR_1 A1 //Sensor Abdomen
-#define FSR_2 A5 //Sensor Lateral izq.
+#define FSR_2 A2 //Sensor Lateral izq. (en el de baquelita es A5)
 #define FSR_3 A3 //Sensor Lateral der.
 
 int aux0 = 0;
@@ -20,11 +24,19 @@ char doble = 'D';
 
 boolean pinEstado = 0;
 
+SoftwareSerial BT_Serial(BT_Rx, BT_Tx);
+
 void setup() {
   // Configuración del puerto Serie para monitor
   Serial.begin(9600);
   Serial.flush();
-  //Serial.print("Serial OK");
+  Serial.print("Serial OK");
+
+ // Configuracion del puerto de serie por software
+ // para comunicarse con el modulo Bluetooth HC-05
+ BT_Serial.begin(9600);
+ BT_Serial.flush();
+  
   // Configuración de los pines
   pinMode(FSR_0, INPUT);
   pinMode(FSR_1, INPUT);
@@ -43,29 +55,29 @@ void loop() {
    
    if(aux0>sensivity0){
     //Serial.println("Golpe en el pecho"); // Mostrar mensaje por el monitor
-    Serial.flush();
-    Serial.write(simple);
+    BT_Serial.flush();
+    BT_Serial.write(simple);
     delay(168);
    }
 
    if(aux1>sensivity1){
     //Serial.println("Golpe en el abdomen"); // Mostrar mensaje por el monitor
-    Serial.flush();
-    Serial.write(simple);
+    BT_Serial.flush();
+    BT_Serial.write(simple);
     delay(168);
    }
 
    if(aux2>sensivity2){
     //Serial.println("Golpe en el lateral izquierdo"); // Mostrar mensaje por el monitor
-    Serial.flush();
-    Serial.write(simple);
+    BT_Serial.flush();
+    BT_Serial.write(simple);
     delay(168);
    }
 
    if(aux3>sensivity3){
     //Serial.println("Golpe en el lateral derecho"); // Mostrar mensaje por el monitor
-    Serial.flush();
-    Serial.write(simple);
+    BT_Serial.flush();
+    BT_Serial.write(simple);
     delay(168);
    }
    
